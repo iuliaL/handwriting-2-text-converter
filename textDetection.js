@@ -15,18 +15,8 @@ const redis = require("redis");
 // the project specified by the GCLOUD_PROJECT environment variable. See
 // https://cloud.google.com/docs/authentication/getting-started#setting_the_environment_variable
 
-// My Credentials
-const GOOGLE_APPLICATION_CREDENTIALS = require("./private-credentials-diary-374313-20541ad5e3b8.json");
-
-const CONFIG = {
-  credentials: {
-    private_key: GOOGLE_APPLICATION_CREDENTIALS.private_key,
-    client_email: GOOGLE_APPLICATION_CREDENTIALS.client_email,
-  },
-};
-
 // Instantiate a vision client
-const client = new vision.ImageAnnotatorClient(CONFIG);
+const client = new vision.ImageAnnotatorClient();
 
 /**
  * State manager for text processing.  Stores and reads results from Redis.
