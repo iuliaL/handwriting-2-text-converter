@@ -2,38 +2,52 @@ const fs = require("fs");
 const path = require("path");
 const text = require("./text");
 
-const directoryName = "./data/07_01_2021";
+const directoryName = "./data";
+processAllFiles(directoryName);
 
 // Make an async function that gets executed immediately
-(async () => {
+async function processAllFiles(entryDirName) {
   // Our starting point
   try {
-    // Get the files as an array
-    const files = await fs.promises.readdir(directoryName, {
+    // Get the files/dirs as an array
+    const items = await fs.promises.readdir(entryDirName, {
       withFileTypes: true,
     });
 
     // Loop them all
-    for (const file of files) {
+    for (const item of items) {
       // Get the full paths
-      const fullPath = path.join(directoryName, file.name);
-      // console.log("file", file.name, fullPath, file.isDirectory());
+      const fullPath = path.join(entryDirName, item.name);
 
-      if (file.isFile()) {
-        if (isImage(file.name)) {
+      if (item.isFile()) {
+        if (item.name.startsWith(".")) { // Skipping .DS_Store files
+          continue;
+        }
+        if (isImage(item.name)) {
           console.log("'%s' is an image file.", fullPath, "Processing...");
           // TODO put this as a promise and wait for it and log when it's done
           text.processImage(fullPath);
+        } else {
+          console.error(
+            "'%s' is an not a supported image file.",
+            fullPath,
+            "Skipping..."
+          );
         }
-      } else if (file.isDirectory()) {
-        console.log("'%s' is a directory.", fullPath);
+      } else if (item.isDirectory()) {
+        console.log(
+          "'%s' is a directory.",
+          fullPath,
+          "Going through its containing files..."
+        );
+        processAllFiles(fullPath);
       }
     }
   } catch (e) {
     // Catch anything bad that happens
     console.error("There's been an error ", e);
   }
-})();
+}
 
 function isImage(fileName) {
   const fileExt = fileName.replace(/^.*\./, "");
