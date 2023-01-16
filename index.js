@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const text = require("./text");
+const image = require("./image");
 
 const directoryName = "./data";
 processAllFiles(directoryName);
@@ -20,13 +21,15 @@ async function processAllFiles(entryDirName) {
       const fullPath = path.join(entryDirName, item.name);
 
       if (item.isFile()) {
-        if (item.name.startsWith(".")) { // Skipping .DS_Store files
+        if (item.name.startsWith(".")) {
+          // Skipping .DS_Store files
           continue;
         }
         if (isImage(item.name)) {
           console.log("'%s' is an image file.", fullPath, "Processing...");
           // TODO put this as a promise and wait for it and log when it's done
-          text.processImage(fullPath);
+          // image.process(fullPath);
+          text.process(fullPath);
         } else {
           console.error(
             "'%s' is an not a supported image file.",

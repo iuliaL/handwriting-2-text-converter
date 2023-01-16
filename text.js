@@ -1,7 +1,6 @@
-// Import the Google Cloud client library
 const fs = require("fs");
 
-async function processImage(fileName, lang) {
+async function process(fileName, lang) {
   const content = fs.readFileSync(fileName);
   const text = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
   Donec sit amet posuere dolor. Vestibulum at luctus nunc. Maecenas a nunc 
@@ -21,4 +20,4 @@ async function processImage(fileName, lang) {
   });
 }
 
-module.exports.processImage = processImage;
+module.exports.process = process;
