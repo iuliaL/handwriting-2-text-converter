@@ -2,7 +2,7 @@
 const vision = require("@google-cloud/vision");
 const fs = require("fs");
 
-async function detectFulltext(fileName, lang) {
+async function processImage(fileName, lang) {
   // Create a client with service account credentials to download from the google cloud console
   const client = new vision.ImageAnnotatorClient({
     keyFilename: "./private-credentials-diary-374313-20541ad5e3b8.json",
@@ -29,5 +29,3 @@ async function detectFulltext(fileName, lang) {
   //   console.log("Page", index + 1, page);
   // });
 }
-
-detectFulltext("./images/07_01_2021/IMG_4584.png", "RO");
