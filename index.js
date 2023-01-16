@@ -3,6 +3,8 @@ const path = require("path");
 const text = require("./text");
 const image = require("./image");
 
+//TODO account for language preference
+
 const directoryName = "./data";
 processAllFiles(directoryName);
 
