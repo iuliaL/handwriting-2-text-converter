@@ -9,24 +9,24 @@ const directoryName = "./data/07_01_2021";
   // Our starting point
   try {
     // Get the files as an array
-    const files = await fs.promises.readdir(directoryName);
+    const files = await fs.promises.readdir(directoryName, {
+      withFileTypes: true,
+    });
 
     // Loop them all
     for (const file of files) {
       // Get the full paths
-      const fileName = path.join(directoryName, file);
+      const fullPath = path.join(directoryName, file.name);
+      // console.log("file", file.name, fullPath, file.isDirectory());
 
-      // Stat the file to see if we have a file or dir
-      const stat = await fs.promises.stat(fileName);
-
-      if (stat.isFile()) {
-        if (isImage(file)) {
-          console.log("'%s' is an image file.", fileName, "Processing...");
+      if (file.isFile()) {
+        if (isImage(file.name)) {
+          console.log("'%s' is an image file.", fullPath, "Processing...");
           // TODO put this as a promise and wait for it and log when it's done
-          text.processImage(fileName);
+          text.processImage(fullPath);
         }
-      } else if (stat.isDirectory()) {
-        console.log("'%s' is a directory.", fileName);
+      } else if (file.isDirectory()) {
+        console.log("'%s' is a directory.", fullPath);
       }
     }
   } catch (e) {
