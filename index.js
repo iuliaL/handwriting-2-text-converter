@@ -28,11 +28,11 @@ async function processAllFiles(entryDirName) {
         if (isImage(item.name)) {
           console.log("'%s' is an image file.", fullPath, "Processing...");
           // TODO put this as a promise and wait for it and log when it's done
-          // image.process(fullPath);
-          text.process(fullPath);
+          image.process(fullPath);
+          // text.process(fullPath);
         } else {
           console.error(
-            "'%s' is an not a supported image file.",
+            "'%s' is not a supported image file.",
             fullPath,
             "Skipping..."
           );
