@@ -1,23 +1,25 @@
 const fs = require("fs");
 const path = require("path");
-const text = require("./text");
-const image = require("./image");
+const handwriting = require("./detectHandwriting");
 
-//TODO account for language preference
+const args = process.argv.slice(2);
+if (args[0] === undefined) {
+  console.log("Usage: npm start [entry-dir] [language]");
+} else {
+  const entryDirName = args[0];
+  const lang = args[1];
+  processAllFiles(entryDirName, lang);
+}
 
-const directoryName = "./data";
-processAllFiles(directoryName);
-
-// Make an async function that gets executed immediately
-async function processAllFiles(entryDirName) {
-  // Our starting point
+// This function is recursive going through all sub-directories
+async function processAllFiles(entryDirName, lang) {
   try {
     // Get the files/dirs as an array
     const items = await fs.promises.readdir(entryDirName, {
       withFileTypes: true,
     });
 
-    // Loop them all
+    // Loop them all includ
     for (const item of items) {
       // Get the full paths
       const fullPath = path.join(entryDirName, item.name);
@@ -30,8 +32,7 @@ async function processAllFiles(entryDirName) {
         if (isImage(item.name)) {
           console.log("'%s' is an image file.", fullPath, "Processing...");
           // TODO put this as a promise and wait for it and log when it's done
-          image.process(fullPath);
-          // text.process(fullPath);
+          handwriting.process(fullPath, lang);
         } else {
           console.error(
             "'%s' is not a supported image file.",
@@ -45,7 +46,7 @@ async function processAllFiles(entryDirName) {
           fullPath,
           "Going through its containing files..."
         );
-        processAllFiles(fullPath);
+        processAllFiles(fullPath, lang);
       }
     }
   } catch (e) {
@@ -54,6 +55,7 @@ async function processAllFiles(entryDirName) {
   }
 }
 
+// Helpers
 function isImage(fileName) {
   const fileExt = fileName.replace(/^.*\./, "");
   const imagesExtension = ["png", "jpg", "jpeg"];

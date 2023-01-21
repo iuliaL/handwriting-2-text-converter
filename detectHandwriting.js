@@ -2,7 +2,7 @@
 const vision = require("@google-cloud/vision");
 const fs = require("fs");
 
-async function processImage(fileName, lang) {
+async function process(fileName, lang) {
   // Create a client with service account credentials to download from the google cloud console
   const client = new vision.ImageAnnotatorClient({
     keyFilename: "./private-credentials-diary-374313-20541ad5e3b8.json",
@@ -34,4 +34,4 @@ async function processImage(fileName, lang) {
   });
 }
 
-module.exports.process = processImage;
+module.exports.process = process;
