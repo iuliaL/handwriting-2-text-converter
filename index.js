@@ -3,16 +3,19 @@ const path = require("path");
 const handwriting = require("./detectHandwriting");
 
 const args = process.argv.slice(2);
-if (args[0] === undefined) {
-  console.log("Usage: npm start [entry-dir] [language]");
+if (args[0] === undefined || args[1] === undefined) {
+  console.log(
+    "Usage: npm start [credentials-json-file] [entry-directory-name] [optional:language EN/RO]"
+  );
 } else {
-  const entryDirName = args[0];
-  const lang = args[1];
-  processAllFiles(entryDirName, lang);
+  const credentialsJSONFile = args[0];
+  const entryDirName = args[1];
+  const lang = args[2];
+  processAllFiles(credentialsJSONFile, entryDirName, lang);
 }
 
 // This function is recursive going through all sub-directories
-async function processAllFiles(entryDirName, lang) {
+async function processAllFiles(credentials, entryDirName, lang) {
   try {
     // Get the files/dirs as an array
     const items = await fs.promises.readdir(entryDirName, {
@@ -32,7 +35,7 @@ async function processAllFiles(entryDirName, lang) {
         if (isImage(item.name)) {
           console.log("'%s' is an image file.", fullPath, "Processing...");
           try {
-            await handwriting.process(fullPath, lang);
+            await handwriting.process(credentials, fullPath, lang);
             console.log("DONE!");
           } catch (e) {
             console.error("There's been an error ", e);
@@ -50,7 +53,7 @@ async function processAllFiles(entryDirName, lang) {
           fullPath,
           "Going through its containing files..."
         );
-        processAllFiles(fullPath, lang);
+        processAllFiles(credentials, fullPath, lang);
       }
     }
   } catch (e) {
