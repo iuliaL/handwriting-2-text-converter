@@ -31,8 +31,12 @@ async function processAllFiles(entryDirName, lang) {
         }
         if (isImage(item.name)) {
           console.log("'%s' is an image file.", fullPath, "Processing...");
-          // TODO put this as a promise and wait for it and log when it's done
-          handwriting.process(fullPath, lang);
+          try {
+            await handwriting.process(fullPath, lang);
+            console.log("DONE!");
+          } catch (e) {
+            console.error("There's been an error ", e);
+          }
         } else {
           console.error(
             "'%s' is not a supported image file.",
