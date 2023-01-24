@@ -2,3 +2,4 @@ private*
 .DS_store
 node_modules
 data
+pending

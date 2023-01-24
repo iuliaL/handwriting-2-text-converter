@@ -8,16 +8,13 @@ async function process(credentials, fileName, lang) {
     keyFilename: credentials,
   });
   const content = fs.readFileSync(fileName);
-  const EN = "en-t-i0-handwrit";
-  const RO = "ro-t-i0-handwrit";
-  const prefferedLanguage = lang === EN ? [EN] : lang === RO ? [RO] : [RO, EN];
 
   const request = {
     image: {
       content,
     },
     imageContext: {
-      languageHints: prefferedLanguage,
+      languageHints: prefferedLanguage(lang),
     },
   };
 
@@ -33,5 +30,26 @@ async function process(credentials, fileName, lang) {
     }
   });
 }
+
+const prefferedLanguage = (lang) => {
+  switch (lang) {
+    // Handwritten hint
+    case "EN-HAND": {
+      return ["en-t-i0-handwrit"];
+    }
+    case "EN": {
+      return ["en"];
+    }
+    // Handwritten hint
+    case "RO-HAND": {
+      return ["ro-t-i0-handwrit"];
+    }
+    case "RO": {
+      return ["ro"];
+    }
+    default:
+      return ["en", "ro"];
+  }
+};
 
 module.exports.process = process;
